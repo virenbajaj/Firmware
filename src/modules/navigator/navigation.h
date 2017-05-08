@@ -107,6 +107,8 @@ enum ORIGIN {
 struct mission_item_s {
 	double lat;			/**< latitude in degrees				*/
 	double lon;			/**< longitude in degrees				*/
+	double x;			/**< x in meters				*/
+	double y;			/**< y in meters				*/
 	union {
 		struct {
 			union {
