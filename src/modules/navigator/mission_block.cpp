@@ -548,6 +548,8 @@ MissionBlock::mission_item_to_position_setpoint(const struct mission_item_s *ite
 		} else {
 			sp->type = position_setpoint_s::SETPOINT_TYPE_TAKEOFF;
 
+			sp->yaw_valid = true;
+
 			// set pitch and ensure that the hold time is zero
 			sp->pitch_min = item->pitch_min;
 		}
@@ -694,7 +696,7 @@ MissionBlock::set_takeoff_item(struct mission_item_s *item, float abs_altitude, 
 	item->altitude = abs_altitude;
 	item->altitude_is_relative = false;
 
-	item->yaw = NAN;
+	item->yaw = _navigator->get_local_position()->yaw;
 	item->loiter_radius = _navigator->get_loiter_radius();
 	item->pitch_min = min_pitch;
 	item->autocontinue = false;
