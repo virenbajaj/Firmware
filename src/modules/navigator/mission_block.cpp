@@ -519,6 +519,8 @@ MissionBlock::mission_item_to_position_setpoint(const struct mission_item_s *ite
 
 	sp->lat = item->lat;
 	sp->lon = item->lon;
+	sp->x = item->x;
+	sp->y = item->y;
 	sp->alt = item->altitude_is_relative ? item->altitude + _navigator->get_home_position()->alt : item->altitude;
 	sp->yaw = item->yaw;
 	sp->loiter_radius = (fabsf(item->loiter_radius) > NAV_EPSILON_POSITION) ? fabsf(item->loiter_radius) :
@@ -684,8 +686,10 @@ MissionBlock::set_takeoff_item(struct mission_item_s *item, float abs_altitude, 
 	item->nav_cmd = NAV_CMD_TAKEOFF;
 
 	/* use current position */
-	item->lat = _navigator->get_global_position()->lat;
-	item->lon = _navigator->get_global_position()->lon;
+	item->lat = NAN;
+	item->lon = NAN;
+	item->x = _navigator->get_local_position()->x;
+	item->y = _navigator->get_local_position()->y;
 
 	item->altitude = abs_altitude;
 	item->altitude_is_relative = false;
@@ -718,8 +722,10 @@ MissionBlock::set_land_item(struct mission_item_s *item, bool at_current_locatio
 
 	/* use current position */
 	if (at_current_location) {
-		item->lat = NAN; //descend at current position
-		item->lon = NAN; //descend at current position
+		item->lat = NAN;
+		item->lon = NAN;
+		item->x = _navigator->get_local_position()->x;
+		item->y = _navigator->get_local_position()->y;
 		item->yaw = _navigator->get_local_position()->yaw;
 
 	} else {
