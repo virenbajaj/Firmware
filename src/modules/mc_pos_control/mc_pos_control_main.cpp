@@ -1393,20 +1393,22 @@ void MulticopterPositionControl::control_auto(float dt)
 
 	if (_pos_sp_triplet.current.valid) {
 
-		//only project setpoints if they are finite, else use current position
-		if (PX4_ISFINITE(_pos_sp_triplet.current.lat) &&
-		    PX4_ISFINITE(_pos_sp_triplet.current.lon)) {
+		if (_pos_sp_triplet.current.position_valid &&
+		    PX4_ISFINITE(_pos_sp_triplet.current.x) &&
+		    PX4_ISFINITE(_pos_sp_triplet.current.y)) {
+
+			_curr_pos_sp(0) = _pos_sp_triplet.current.x;
+			_curr_pos_sp(1) = _pos_sp_triplet.current.y;
+
+		} else if (PX4_ISFINITE(_pos_sp_triplet.current.lat) &&
+			   PX4_ISFINITE(_pos_sp_triplet.current.lon)) {
 			/* project setpoint to local frame */
 			map_projection_project(&_ref_pos,
 					       _pos_sp_triplet.current.lat, _pos_sp_triplet.current.lon,
 					       &_curr_pos_sp.data[0], &_curr_pos_sp.data[1]);
 
-		} else if (PX4_ISFINITE(_pos_sp_triplet.current.x) &&
-			   PX4_ISFINITE(_pos_sp_triplet.current.y)) {
-			_curr_pos_sp(0) = _pos_sp_triplet.current.x;
-			_curr_pos_sp(1) = _pos_sp_triplet.current.y;
-
 		} else {
+			PX4_WARN("X/Y Position setpoints not valid - using current position");
 			_curr_pos_sp(0) = _pos(0);
 			_curr_pos_sp(1) = _pos(1);
 		}

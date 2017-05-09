@@ -109,6 +109,7 @@ struct mission_item_s {
 	double lon;			/**< longitude in degrees				*/
 	double x;			/**< x in meters				*/
 	double y;			/**< y in meters				*/
+	bool use_lpos;		/** if lpos (x, y) should be used for the setpoint */
 	union {
 		struct {
 			union {
