@@ -188,6 +188,9 @@ set(config_module_list
 
 	# Hardware test
 	#examples/hwtest
+	
+	#hello sky	
+	examples/px4_simple_app
 )
 
 set(config_extra_builtin_cmds
